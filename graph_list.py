@@ -81,17 +81,34 @@ class GraphList:
         else:
             return v in self.adj_list[u]
         
+    # Busca em largura
+    def breadth_first_search(self, start, end):
+        visited = []
+        queue = [start]
+
+        while queue:
+            node = queue.pop(0)
+            if node not in visited:
+                visited.append(node)
+                print(node)
+                if node == end:
+                    break
+                queue.extend(self.adj_list[node])
 
 if __name__ == "__main__":
 
     # Testando a classe Graph
-    graph = GraphList(6, directed=True, weighted=True)
-    graph.add_edge(0, 1, 1.9)
+    graph = GraphList(7, directed=True, weighted=False)
+    graph.add_edge(0, 1)
     graph.add_edge(0, 3)
     graph.add_edge(1, 2)
     graph.add_edge(1, 4)
+    graph.add_edge(1, 5)
     graph.add_edge(2, 4)
     graph.add_edge(2, 5)
     graph.add_edge(3, 4)
     graph.add_edge(4, 5)
+    graph.add_edge(1, 6)
     print(graph,'\n')
+
+    graph.breadth_first_search(1, 4)
