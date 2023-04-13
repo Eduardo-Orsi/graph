@@ -95,15 +95,3 @@ if __name__ == "__main__":
     graph.add_edge(3, 4)
     graph.add_edge(4, 5)
     print(graph,'\n')
-
-    print(f"Vizinho: {graph.return_neighbor(2)}\n")
-
-    print(f"Tem aresta: {graph.has_edge(1, 2)} \n")
-
-    graph.remove_edge(0, 1)
-    print("Grafo depois de remover aresta")
-    print(graph,'\n')
-
-    print("Grafo depois de remover vertice")
-    graph.remove_vertice(2)
-    print(graph,'\n')
