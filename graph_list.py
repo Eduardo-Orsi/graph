@@ -85,6 +85,7 @@ class GraphList:
     def breadth_first_search(self, start, end):
         visited = []
         queue = [start]
+        # queue = self.adj_list[start]
 
         while queue:
             node = queue.pop(0)
@@ -94,6 +95,19 @@ class GraphList:
                 if node == end:
                     break
                 queue.extend(self.adj_list[node])
+
+    def depth_search(self, start:int, end:int, visited=None):
+        if visited is None:
+            visited = []
+
+        visited.append(start)
+        print(start)
+        if start == end:
+            return
+
+        for neighbor in graph.adj_list[start]:
+            if neighbor not in visited:
+                self.depth_search(neighbor, end, visited)
 
 if __name__ == "__main__":
 
@@ -111,4 +125,6 @@ if __name__ == "__main__":
     graph.add_edge(1, 6)
     print(graph,'\n')
 
-    graph.breadth_first_search(1, 4)
+    graph.breadth_first_search(1, 6)
+    print("\n")
+    graph.depth_search(1, 6)
