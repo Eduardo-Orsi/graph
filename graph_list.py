@@ -167,7 +167,7 @@ class GraphList:
 
 if __name__ == "__main__":
 
-    graph = GraphList.load_graph_file("slides.txt")
+    graph = GraphList.load_graph_file("graphs_txt/espacoaereo.txt")
     print(graph)
     graph.dijkstra(1)
-    # graph.depth_search(start=0, end=2)
+    graph.depth_search(0, 4)
