@@ -148,23 +148,23 @@ class GraphList:
 
     # Dijkstra
     def dijkstra(self, start:int) -> dict[int, float]:
-        distances = {node: float('inf') for node in graph.adj_list}
-        distances[start] = 0
+        distances_dict = {node: float('inf') for node in graph.adj_list}
+        distances_dict[start] = 0
         queue = [(0, start)]
         
         while queue:
             current_distance, current_node = heapq.heappop(queue)
-            if current_distance > distances[current_node]:
+            if current_distance > distances_dict[current_node]:
                 continue
             
             for neighbor, weight in self.adj_list[current_node]:
                 distance = current_distance + weight
-                if distance < distances[neighbor]:
-                    distances[neighbor] = distance
+                if distance < distances_dict[neighbor]:
+                    distances_dict[neighbor] = distance
                     heapq.heappush(queue, (distance, neighbor))
 
-        print(distances)
-        return distances
+        print(distances_dict)
+        return distances_dict
 
 if __name__ == "__main__":
 
