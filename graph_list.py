@@ -1,7 +1,7 @@
 
 class GraphList:
     # Instanciando Construtor
-    def __init__(self, vertice_number: int, directed: bool = False, weighted: bool = False):
+    def __init__(self, vertice_number:int, directed:bool = False, weighted:bool = False):
         self.vertice_number = vertice_number
         self.adj_list = {i: [] for i in range(vertice_number)}
         self.vertex_names = {}
@@ -9,7 +9,7 @@ class GraphList:
         self.weighted = weighted
 
     # Adiciona Aresta
-    def add_edge(self, u: int, v: int, weight: float = None) -> None:
+    def add_edge(self, u:int, v:int, weight:float = None) -> None:
         if self.weighted:
             self.adj_list[u].append((v, weight))
             if not self.directed:
@@ -20,7 +20,7 @@ class GraphList:
                 self.adj_list[v].append(u)
 
     # Remove Aresta
-    def remove_edge(self, u: int, v: int) -> None:
+    def remove_edge(self, u:int, v:int) -> None:
         if self.weighted:
             self.adj_list[u] = [(vertex, w) for vertex, w in self.adj_list[u] if vertex != v]
             if not self.directed:
@@ -31,14 +31,14 @@ class GraphList:
                 self.adj_list[v].remove(u)
 
     # Adiciona vértice
-    def add_vertice(self, name: str = None) -> None:
+    def add_vertice(self, name:str = None) -> None:
         self.vertice_number += 1
         self.adj_list[self.vertice_number - 1] = []
         if name is not None:
             self.vertex_names[self.vertice_number - 1] = name
 
     # Remove vértice
-    def remove_vertice(self, label: int) -> None:
+    def remove_vertice(self, label:int) -> None:
         del self.adj_list[label]
         self.vertice_number -= 1
         if label in self.vertex_names:
@@ -48,14 +48,14 @@ class GraphList:
                 self.vertex_names[key] -= 1
 
     # Retorna o índice do vértice
-    def get_vertex_index(self, label: str) -> int:
+    def get_vertex_index(self, label:str) -> int:
         if label in self.vertex_names.values():
             return list(self.vertex_names.keys())[list(self.vertex_names.values()).index(label)]
         else:
             return -1
 
     # Retorna vizinhos
-    def return_neighbor(self, label: int) -> None:
+    def return_neighbor(self, label:int) -> None:
         if self.weighted:
             return [vertex for vertex, weight in self.adj_list[label]]
         else:
@@ -82,10 +82,9 @@ class GraphList:
             return v in self.adj_list[u]
         
     # Busca em largura
-    def breadth_first_search(self, start, end):
+    def breadth_first_search(self, start:int, end:int) -> None:
         visited = []
         queue = [start]
-        # queue = self.adj_list[start]
 
         while queue:
             node = queue.pop(0)
@@ -96,7 +95,8 @@ class GraphList:
                     break
                 queue.extend(self.adj_list[node])
 
-    def depth_search(self, start:int, end:int, visited=None):
+    # Busca em profundidade
+    def depth_search(self, start:int, end:int, visited:list[int]=None) -> None:
         if visited is None:
             visited = []
 
@@ -109,9 +109,12 @@ class GraphList:
             if neighbor not in visited:
                 self.depth_search(neighbor, end, visited)
 
+    # Dijkstra
+    def dijkstra():
+        pass
+
 if __name__ == "__main__":
 
-    # Testando a classe Graph
     graph = GraphList(7, directed=True, weighted=False)
     graph.add_edge(0, 1)
     graph.add_edge(0, 3)
