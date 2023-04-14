@@ -130,9 +130,10 @@ class GraphList:
 
         visited.append(start)
         print(start)
+
         if start == end:
-            return
-        
+            return True
+
         if self.weighted:
             neighbors = [edge[0] for edge in graph.adj_list[start]]
         else:
@@ -140,7 +141,10 @@ class GraphList:
         
         for neighbor in neighbors:
             if neighbor not in visited:
-                self.depth_search(neighbor, end, visited)
+                if self.depth_search(neighbor, end, visited):
+                    return True
+        return
+        
 
     # Dijkstra
     def dijkstra(self, start:int) -> dict[int, float]:
@@ -164,7 +168,7 @@ class GraphList:
 
 if __name__ == "__main__":
 
-    graph = GraphList.load_graph_file("espacoaereo.txt")
+    graph = GraphList.load_graph_file("slides.txt")
     print(graph)
     graph.dijkstra(1)
-    graph.depth_search(2, 1)
+    # graph.depth_search(start=0, end=2)
