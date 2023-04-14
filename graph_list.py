@@ -1,3 +1,5 @@
+import heapq
+
 
 class GraphList:
     # Instanciando Construtor
@@ -7,6 +9,26 @@ class GraphList:
         self.vertex_names = {}
         self.directed = directed
         self.weighted = weighted
+
+    # Cria o grafo com base em um txt
+    @staticmethod
+    def load_graph_file(self, txt_graph_path:str):
+        with open(txt_graph_path, 'r') as f:
+            content = f.read()
+            content = content.replace('\n',' ')
+            content = content.split(" ")
+            vertice_number = int(content[0])
+            directed = bool(int(content[2]))
+            weighted = bool(int(content[3]))
+            graph = GraphList(vertice_number, directed, weighted)
+
+            if weighted:
+                for i in range(4, len(content), 3):
+                    graph.add_edge(int(content[i])-1,int(content[i+1])-1)
+            else:
+                for i in range(4, len(content), 3):
+                    graph.add_edge(int(content[i])-1,int(content[i+1])-1,int(content[i+2]))
+        return graph
 
     # Adiciona Aresta
     def add_edge(self, u:int, v:int, weight:float = None) -> None:
@@ -93,7 +115,13 @@ class GraphList:
                 print(node)
                 if node == end:
                     break
-                queue.extend(self.adj_list[node])
+
+                if self.weighted:
+                    neighbors = [edge[0] for edge in graph.adj_list[start]]
+                else:
+                    neighbors = self.adj_list[start]
+
+                queue.extend(neighbors)
 
     # Busca em profundidade
     def depth_search(self, start:int, end:int, visited:list[int]=None) -> None:
@@ -104,30 +132,73 @@ class GraphList:
         print(start)
         if start == end:
             return
-
-        for neighbor in graph.adj_list[start]:
+        
+        if self.weighted:
+            neighbors = [edge[0] for edge in graph.adj_list[start]]
+        else:
+            neighbors = self.adj_list[start]
+        
+        for neighbor in neighbors:
             if neighbor not in visited:
                 self.depth_search(neighbor, end, visited)
 
     # Dijkstra
-    def dijkstra():
-        pass
+    def dijkstra(self, start:int) -> dict[int, float]:
+        # Inicializa a tabela de distâncias com valores infinitos
+        distances = {node: float('inf') for node in graph.adj_list}
+        # A distância para o nó inicial é zero
+        distances[start] = 0
+        # Cria uma fila de prioridade para armazenar os nós a serem processados
+        queue = [(0, start)]
+        
+        while queue:
+            # Remove o nó com a menor distância da fila de prioridade
+            current_distance, current_node = heapq.heappop(queue)
+            # Se a distância atual for maior do que a distância armazenada, pule este nó
+            if current_distance > distances[current_node]:
+                continue
+            # Verifica os vizinhos do nó atual
+            for neighbor, weight in self.adj_list[current_node]:
+                # Calcula a distância até o vizinho
+                distance = current_distance + weight
+                # Se a distância for menor do que a armazenada, atualize
+                if distance < distances[neighbor]:
+                    distances[neighbor] = distance
+                    # Adiciona o vizinho na fila de prioridade
+                    heapq.heappush(queue, (distance, neighbor))
+    
+        return distances
 
 if __name__ == "__main__":
 
-    graph = GraphList(7, directed=True, weighted=False)
-    graph.add_edge(0, 1)
-    graph.add_edge(0, 3)
-    graph.add_edge(1, 2)
-    graph.add_edge(1, 4)
-    graph.add_edge(1, 5)
-    graph.add_edge(2, 4)
-    graph.add_edge(2, 5)
-    graph.add_edge(3, 4)
-    graph.add_edge(4, 5)
-    graph.add_edge(1, 6)
+    graph = GraphList(7, directed=True, weighted=True)
+    graph.add_edge(0, 1, 2)
+    graph.add_edge(0, 3, 5)
+    graph.add_edge(1, 2, 1)
+    graph.add_edge(1, 4, 1.5)
+    graph.add_edge(1, 5, 2.4)
+    graph.add_edge(2, 4, 7)
+    graph.add_edge(2, 5, 10)
+    graph.add_edge(3, 4, 1)
+    graph.add_edge(4, 5, 2)
+    graph.add_edge(1, 6, 3)
     print(graph,'\n')
+
+    # graph = GraphList(7, directed=True, weighted=False)
+    # graph.add_edge(0, 1)
+    # graph.add_edge(0, 3)
+    # graph.add_edge(1, 2)
+    # graph.add_edge(1, 4)
+    # graph.add_edge(1, 5)
+    # graph.add_edge(2, 4)
+    # graph.add_edge(2, 5)
+    # graph.add_edge(3, 4)
+    # graph.add_edge(4, 5)
+    # graph.add_edge(1, 6)
+    # print(graph,'\n')
 
     graph.breadth_first_search(1, 6)
     print("\n")
     graph.depth_search(1, 6)
+
+    print(graph.dijkstra(1))
