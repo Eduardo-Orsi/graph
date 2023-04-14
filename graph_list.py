@@ -145,7 +145,6 @@ class GraphList:
                     return True
         return
         
-
     # Dijkstra
     def dijkstra(self, start:int) -> dict[int, float]:
         distances_dict = {node: float('inf') for node in graph.adj_list}
