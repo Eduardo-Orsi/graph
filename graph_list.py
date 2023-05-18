@@ -164,11 +164,29 @@ class GraphList:
 
         print(distances_dict)
         return distances_dict
+    
+    def is_planar(self) -> bool:
+
+        if self.weighted:
+            for node in self.adj_list: #i
+                for node_neighbor in self.adj_list[node]: #j
+                    for neighbor_neighbor in self.adj_list[node_neighbor[0]]:
+                        if neighbor_neighbor == node:
+                            return True
+            return False
+        
+        for node in self.adj_list: #i
+            for node_neighbor in self.adj_list[node]: #j
+                for neighbor_neighbor in self.adj_list[node_neighbor]:
+                    if neighbor_neighbor == node:
+                        return True
+                    
+        return False
 
 if __name__ == "__main__":
 
     graph = GraphList.load_graph_file("graphs_txt/slides_modificado.txt")
     print(graph)
-    graph.dijkstra(0)
-    graph.depth_search(0, 4)
-    graph.breadth_first_search(0, 4)
+    print("É direcionado: ", graph.directed)
+    print("É ponderado: ", graph.weighted)
+    print(graph.is_planar())
