@@ -186,19 +186,17 @@ class GraphList:
 
     def welsh_powell(self):
         colors = {node: None for node in self.degree_list}
-        colored_nodes = []
         color_count = 0
-        all_colored = False
 
         for vertex in self.degree_list:
             if colors[vertex] == None:
-                if not any([colors[neighbor] == color_count for neighbor in self.adj_list[vertex]]):
-                    colors[vertex] = color_count
+                while any([colors[neighbor] == color_count for neighbor in self.return_neighbor(vertex)]):
                     color_count += 1
-
+                colors[vertex] = color_count
+            color_count = 0
+            
         return colors
     
-
     def dsatur(self):
         # Inicialização
         uncolored_vertices = list(range(self.vertice_number))
@@ -239,10 +237,9 @@ class GraphList:
 
 if __name__ == "__main__":
 
-    graph = GraphList.load_graph_file("graphs_txt/graph.txt")
+    graph = GraphList.load_graph_file("graphs_txt/slides_modificado.txt")
     print(graph)
     graph.get_degree_list()
     graph.sort_degree_list()
     print(graph.degree_list)
-    print(graph.welsh_powell())
     print(graph.dsatur())
