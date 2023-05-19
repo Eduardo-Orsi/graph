@@ -1,0 +1,31 @@
+def welsh_powell(self) -> dict[int, int]:
+        # Ordenando os vertices pelo grau
+        degrees = {}
+        for vertex in self.adj_list:
+            degree = len(self.adj_list[vertex])
+            degrees[vertex] = degree
+        sorted_degrees = dict(sorted(degrees.items(), key=lambda item: item[1], reverse=True))
+
+        # Criando a lista de vetores coloridos
+        colored_vertices = {}
+        color = 0
+        while sorted_degrees:
+            color += 1
+            colored_vertices[color] = []
+            conflicting_vertices = []
+            for vertex in sorted_degrees:
+                if vertex not in conflicting_vertices:
+                    colored_vertices[color].append(vertex)
+                    for neighbor in self.adj_list[vertex]:
+                        if neighbor in sorted_degrees:
+                            conflicting_vertices.append(neighbor)
+                    del sorted_degrees[vertex]
+
+        # Atribuindo cores aos vertices
+        color_assignment = {}
+        for color in colored_vertices:
+            for vertex in colored_vertices[color]:
+                color_assignment[vertex] = color
+
+        print(color_assignment)
+        return color_assignment

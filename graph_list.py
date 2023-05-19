@@ -1,4 +1,5 @@
 import heapq
+import random
 
 
 class GraphList:
@@ -9,6 +10,7 @@ class GraphList:
         self.vertex_names = {}
         self.directed = directed
         self.weighted = weighted
+        self.degree_list = None
 
     # Cria o grafo com base em um txt
     @staticmethod
@@ -182,11 +184,38 @@ class GraphList:
                         return True
                     
         return False
+    
+    def get_degree_list(self) -> None:
+        self.degree_list = [(node, len(self.adj_list[node])) for node in self.adj_list]
+    
+    def sort_degree_list(self) -> None:
+        if not self.degree_list:
+            return None
+        self.degree_list.sort(key=lambda x: x[1], reverse=True)
+
+    def welsh_powell(self) -> None:
+        colors_list = GraphList.get_colors(len(self.degree_list))
+        colored_nodes = []
+        for node in self.degree_list:
+            if node == self.degree_list[0]:
+                colored_nodes.append([node[0], colors_list[0]])
+                colors_list[0][1] = True
+
+    @staticmethod
+    def get_colors(vertice_number: int) -> list[tuple[int,int,int]]:
+        colors_list = []
+        for _ in range(vertice_number):
+            r = random.randint(0, 255)
+            g = random.randint(0, 255)
+            b = random.randint(0, 255)
+            colors_list.append([(r, g, b), False])
+        return colors_list
 
 if __name__ == "__main__":
 
     graph = GraphList.load_graph_file("graphs_txt/slides_modificado.txt")
     print(graph)
-    print("É direcionado: ", graph.directed)
-    print("É ponderado: ", graph.weighted)
-    print(graph.is_planar())
+    graph.get_degree_list()
+    graph.sort_degree_list()
+    print(graph.degree_list)
+    graph.welsh_powell()
