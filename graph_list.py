@@ -191,8 +191,9 @@ class GraphList:
 
         for vertex in self.degree_list:
             if colors[vertex] == None:
-                colors[vertex] = color_count
-                color_count += 1
+                if not any([colors[neighbor] == color_count for neighbor in self.adj_list[vertex]]):
+                    colors[vertex] = color_count
+                    color_count += 1
 
                 for adj_vertex in self.adj_list[vertex]:
                     if colors[adj_vertex] == None:
