@@ -1,4 +1,5 @@
 import heapq
+import time
 
 
 class GraphList:
@@ -194,7 +195,7 @@ class GraphList:
                     color_count += 1
                 colors[vertex] = color_count
             color_count = 0
-            
+
         return colors
     
     def dsatur(self):
@@ -224,7 +225,7 @@ class GraphList:
                     colors[neighbor] = colors[neighbor] + 1 if neighbor in colors else 1
                     max_saturation = max(max_saturation, colors[neighbor])
         
-        return max_saturation + 1
+        return colors
 
     def get_degree_list(self) -> None:
         self.degree_list = [[node, len(self.adj_list[node])] for node in self.adj_list]
@@ -237,9 +238,17 @@ class GraphList:
 
 if __name__ == "__main__":
 
-    graph = GraphList.load_graph_file("graphs_txt/slides_modificado.txt")
+    graph = GraphList.load_graph_file("graphs_txt/graph.txt")
     print(graph)
     graph.get_degree_list()
     graph.sort_degree_list()
-    print(graph.degree_list)
-    print(graph.dsatur())
+
+    initial_time = time.time()
+    color_welsh_powell = graph.welsh_powell()
+    print(f"Tempo de Execução Welsh Powell: {time.time() - initial_time}")
+    print(color_welsh_powell)
+
+    initial_time = time.time()
+    colors_dsatur = graph.dsatur()
+    print(f"Tempo de Execução DSATUR: {time.time() - initial_time}")
+    print(colors_dsatur)
