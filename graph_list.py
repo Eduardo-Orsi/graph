@@ -185,15 +185,20 @@ class GraphList:
                     
         return False
 
-    def welsh_powell(self) -> None:
-        color = 0
-        colored_nodes = [self.degree_list[0]]
-        node_colors = [[self.degree_list, color]]
-        for node in self.adj_list:
-            if node in colored_nodes:
-                continue
-            if any([colored[1] == color for colored in node_colors]):
-                pass
+    def welsh_powell(self):
+        colors = {node: None for node in self.degree_list}
+        color_count = 0
+
+        for vertex in self.degree_list:
+            if colors[vertex] == None:
+                colors[vertex] = color_count
+                color_count += 1
+
+                for adj_vertex in self.adj_list[vertex]:
+                    if colors[adj_vertex] == None:
+                        colors[adj_vertex] = color_count
+
+        return colors
 
     def get_degree_list(self) -> None:
         self.degree_list = [[node, len(self.adj_list[node])] for node in self.adj_list]
@@ -210,4 +215,5 @@ if __name__ == "__main__":
     print(graph)
     graph.get_degree_list()
     graph.sort_degree_list()
-    graph.welsh_powell()
+    print(graph.degree_list)
+    print(graph.welsh_powell())
