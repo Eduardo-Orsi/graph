@@ -195,10 +195,6 @@ class GraphList:
                     colors[vertex] = color_count
                     color_count += 1
 
-                for adj_vertex in self.adj_list[vertex]:
-                    if colors[adj_vertex] == None:
-                        colors[adj_vertex] = color_count
-
         return colors
 
     def get_degree_list(self) -> None:
