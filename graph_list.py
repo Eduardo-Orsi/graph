@@ -98,7 +98,7 @@ class GraphList:
             s += str(self.adj_list[i]) + "\n"
         return s
 
-    # Retorna a existência do aresta
+    # Retorna a existência da aresta
     def has_edge(self, u: int, v: int) -> bool:
         if self.weighted:
             return any([vertex == v for vertex, weight in self.adj_list[u]])
@@ -184,32 +184,25 @@ class GraphList:
                         return True
                     
         return False
-    
+
+    def welsh_powell(self) -> None:
+        color = 0
+        colored_nodes = [self.degree_list[0]]
+        node_colors = [[self.degree_list, color]]
+        for node in self.adj_list:
+            if node in colored_nodes:
+                continue
+            if any([colored[1] == color for colored in node_colors]):
+                pass
+
     def get_degree_list(self) -> None:
-        self.degree_list = [(node, len(self.adj_list[node])) for node in self.adj_list]
+        self.degree_list = [[node, len(self.adj_list[node])] for node in self.adj_list]
     
     def sort_degree_list(self) -> None:
         if not self.degree_list:
             return None
         self.degree_list.sort(key=lambda x: x[1], reverse=True)
-
-    def welsh_powell(self) -> None:
-        colors_list = GraphList.get_colors(len(self.degree_list))
-        colored_nodes = []
-        for node in self.degree_list:
-            if node == self.degree_list[0]:
-                colored_nodes.append([node[0], colors_list[0]])
-                colors_list[0][1] = True
-
-    @staticmethod
-    def get_colors(vertice_number: int) -> list[tuple[int,int,int]]:
-        colors_list = []
-        for _ in range(vertice_number):
-            r = random.randint(0, 255)
-            g = random.randint(0, 255)
-            b = random.randint(0, 255)
-            colors_list.append([(r, g, b), False])
-        return colors_list
+        self.degree_list = [node[0] for node in self.degree_list]
 
 if __name__ == "__main__":
 
@@ -217,5 +210,4 @@ if __name__ == "__main__":
     print(graph)
     graph.get_degree_list()
     graph.sort_degree_list()
-    print(graph.degree_list)
     graph.welsh_powell()
