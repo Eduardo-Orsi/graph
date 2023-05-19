@@ -1,5 +1,4 @@
 import heapq
-import random
 
 
 class GraphList:
@@ -187,7 +186,9 @@ class GraphList:
 
     def welsh_powell(self):
         colors = {node: None for node in self.degree_list}
+        colored_nodes = []
         color_count = 0
+        all_colored = False
 
         for vertex in self.degree_list:
             if colors[vertex] == None:
@@ -196,6 +197,36 @@ class GraphList:
                     color_count += 1
 
         return colors
+    
+
+    def dsatur(self):
+        # Inicialização
+        uncolored_vertices = list(range(self.vertice_number))
+        max_degree = max(len(self.adj_list[vertex]) for vertex in uncolored_vertices)
+        max_saturation = 0
+        colors = {}
+        
+        # Enquanto houver vértices não coloridos
+        while uncolored_vertices:
+            # Seleciona o vértice com o maior grau de saturação ou, em caso de empate, com o maior grau
+            selected_vertex = max(uncolored_vertices, key=lambda v: (colors[v] if v in colors else -1, -len(self.adj_list[v])))
+            
+            # Atribui a cor disponível que minimize a saturação
+            available_colors = set(range(max_degree + 1))
+            for neighbor in self.adj_list[selected_vertex]:
+                if neighbor in colors:
+                    available_colors.discard(colors[neighbor])
+            
+            colors[selected_vertex] = min(available_colors)
+            uncolored_vertices.remove(selected_vertex)
+            
+            # Atualiza a saturação dos vizinhos
+            for neighbor in self.adj_list[selected_vertex]:
+                if neighbor not in colors:
+                    colors[neighbor] = colors[neighbor] + 1 if neighbor in colors else 1
+                    max_saturation = max(max_saturation, colors[neighbor])
+        
+        return max_saturation + 1
 
     def get_degree_list(self) -> None:
         self.degree_list = [[node, len(self.adj_list[node])] for node in self.adj_list]
@@ -208,9 +239,10 @@ class GraphList:
 
 if __name__ == "__main__":
 
-    graph = GraphList.load_graph_file("graphs_txt/slides_modificado.txt")
+    graph = GraphList.load_graph_file("graphs_txt/graph.txt")
     print(graph)
     graph.get_degree_list()
     graph.sort_degree_list()
     print(graph.degree_list)
     print(graph.welsh_powell())
+    print(graph.dsatur())
