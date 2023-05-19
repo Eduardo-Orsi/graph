@@ -169,6 +169,9 @@ class GraphList:
     
     def is_planar(self) -> bool:
 
+        if self.vertice_number < 5:
+            return True
+
         if self.weighted:
             for node in self.adj_list: #i
                 for node_neighbor in self.adj_list[node]: #j
@@ -238,10 +241,14 @@ class GraphList:
 
 if __name__ == "__main__":
 
-    graph = GraphList.load_graph_file("graphs_txt/graph.txt")
+    graph = GraphList.load_graph_file("graphs_txt/C4000-260-X.txt")
     print(graph)
     graph.get_degree_list()
     graph.sort_degree_list()
+
+    initial_time = time.time()
+    colors_dsatur = graph.is_planar()
+    print(f"Tempo de Execução Planaridade: {time.time() - initial_time}")
 
     initial_time = time.time()
     color_welsh_powell = graph.welsh_powell()
