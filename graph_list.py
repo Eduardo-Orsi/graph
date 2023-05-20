@@ -16,20 +16,26 @@ class GraphList:
     @staticmethod
     def load_graph_file(txt_graph_path:str):
         with open(txt_graph_path, 'r') as f:
-            content = f.read()
-            content = content.replace('\n',' ')
-            content = content.split(" ")
-            vertice_number = int(content[0])
-            directed = bool(int(content[2]))
-            weighted = bool(int(content[3]))
+            content = f.readlines()
+            for line in range(len(content)):
+                content[line] = content[line].replace('\n','')
+            
+            content[0] = content[0].split(' ')
+            vertice_number = int(content[0][0])
+            directed = bool(int(content[0][2]))
+            weighted = bool(int(content[0][3]))
+
             graph = GraphList(vertice_number, directed, weighted)
+            content.pop(0)
 
             if not weighted:
-                for i in range(4, len(content), 3):
-                    graph.add_edge(int(content[i]),int(content[i+1]))
+                for i in content:
+                    i = i.split(' ')
+                    graph.add_edge(int(i[0]),int(i[1]))
             else:
-                for i in range(4, len(content), 3):
-                    graph.add_edge(int(content[i]),int(content[i+1]),float(content[i+2]))
+                for i in content:
+                    i = i.split(' ')
+                    graph.add_edge(int(i[0]),int(i[1]),float(i[2]))
         return graph
 
     # Adiciona Aresta
@@ -239,9 +245,13 @@ class GraphList:
         self.degree_list.sort(key=lambda x: x[1], reverse=True)
         self.degree_list = [node[0] for node in self.degree_list]
 
+def print_color_map(colors: dict[int, int]) -> None:
+    for key, value in colors.items():
+        print(f"{key}|{value}")
+
 if __name__ == "__main__":
 
-    graph = GraphList.load_graph_file("graphs_txt/C4000-260-X.txt")
+    graph = GraphList.load_graph_file("graphs_txt/k5.txt")
     print(graph)
     graph.get_degree_list()
     graph.sort_degree_list()
@@ -252,10 +262,14 @@ if __name__ == "__main__":
 
     initial_time = time.time()
     color_welsh_powell = graph.welsh_powell()
-    print(f"Tempo de Execução Welsh Powell: {time.time() - initial_time}")
     print(color_welsh_powell)
+    print(f"Tempo de Execução Welsh Powell: {time.time() - initial_time}")
+    print(f"Número de cores: {max(color_welsh_powell)}")
+
+    print('\n')
 
     initial_time = time.time()
     colors_dsatur = graph.dsatur()
-    print(f"Tempo de Execução DSATUR: {time.time() - initial_time}")
     print(colors_dsatur)
+    print(f"Tempo de Execução DSATUR: {time.time() - initial_time}")
+    print(f"Número de cores: {max(colors_dsatur)}")
