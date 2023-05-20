@@ -29,13 +29,13 @@ class GraphList:
             content.pop(0)
 
             if not weighted:
-                for i in content:
-                    i = i.split(' ')
-                    graph.add_edge(int(i[0]),int(i[1]))
+                for line in content:
+                    line = line.split(' ')
+                    graph.add_edge(int(line[0]),int(line[1]))
             else:
-                for i in content:
-                    i = i.split(' ')
-                    graph.add_edge(int(i[0]),int(i[1]),float(i[2]))
+                for line in content:
+                    line = line.split(' ')
+                    graph.add_edge(int(line[0]),int(line[1]),float(line[2]))
         return graph
 
     # Adiciona Aresta
@@ -251,20 +251,21 @@ def print_color_map(colors: dict[int, int]) -> None:
 
 if __name__ == "__main__":
 
-    graph = GraphList.load_graph_file("graphs_txt/k5.txt")
+    graph = GraphList.load_graph_file("graphs_txt/r250-66-65.txt")
     print(graph)
     graph.get_degree_list()
     graph.sort_degree_list()
 
     initial_time = time.time()
-    colors_dsatur = graph.is_planar()
+    is_planar = graph.is_planar()
+    print(f"Planar: {is_planar}")
     print(f"Tempo de Execução Planaridade: {time.time() - initial_time}")
 
     initial_time = time.time()
     color_welsh_powell = graph.welsh_powell()
     print(color_welsh_powell)
     print(f"Tempo de Execução Welsh Powell: {time.time() - initial_time}")
-    print(f"Número de cores: {max(color_welsh_powell)}")
+    print(f"Número de cores: {max(color_welsh_powell.values()) + 1}")
 
     print('\n')
 
@@ -272,4 +273,4 @@ if __name__ == "__main__":
     colors_dsatur = graph.dsatur()
     print(colors_dsatur)
     print(f"Tempo de Execução DSATUR: {time.time() - initial_time}")
-    print(f"Número de cores: {max(colors_dsatur)}")
+    print(f"Número de cores: {max(colors_dsatur.values()) + 1}")
