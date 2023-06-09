@@ -237,6 +237,23 @@ class GraphList:
         
         return colors
     
+    def bfs(self, residual_graph, source, sink, parent):
+        visited = [False] * self.vertice_number
+        queue = []
+        queue.append(source)
+        visited[source] = True
+
+        while queue:
+            u = queue.pop(0)
+
+            for ind, val in enumerate(residual_graph[u]):
+                if visited[ind] == False and val > 0:
+                    queue.append(ind)
+                    visited[ind] = True
+                    parent[ind] = u
+
+        return True if visited[sink] else False
+    
     def ford_fulkerson(self, source, sink):
         parent = [-1] * self.vertice_number
         max_flow = 0
