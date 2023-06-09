@@ -1,4 +1,5 @@
 import heapq
+import copy
 import time
 
 
@@ -236,6 +237,9 @@ class GraphList:
         
         return colors
 
+    def copy(self):
+        return copy.copy(self)
+
     def get_degree_list(self) -> None:
         self.degree_list = [[node, len(self.adj_list[node])] for node in self.adj_list]
     
@@ -251,26 +255,31 @@ def print_color_map(colors: dict[int, int]) -> None:
 
 if __name__ == "__main__":
 
-    graph = GraphList.load_graph_file("graphs_txt/r250-66-65.txt")
-    print(graph)
-    graph.get_degree_list()
-    graph.sort_degree_list()
+    graph = GraphList.load_graph_file("graphs_txt/k5.txt")
+    print("Grafo 01")
+    print(hex(id(graph)))
 
-    initial_time = time.time()
-    is_planar = graph.is_planar()
-    print(f"Planar: {is_planar}")
-    print(f"Tempo de Execução Planaridade: {time.time() - initial_time}")
+    graph_2 = graph.copy()
+    print("Grafo 02")
+    print(hex(id(graph_2)))
+    # graph.get_degree_list()
+    # graph.sort_degree_list()
 
-    initial_time = time.time()
-    color_welsh_powell = graph.welsh_powell()
-    print(color_welsh_powell)
-    print(f"Tempo de Execução Welsh Powell: {time.time() - initial_time}")
-    print(f"Número de cores: {max(color_welsh_powell.values()) + 1}")
+    # initial_time = time.time()
+    # is_planar = graph.is_planar()
+    # print(f"Planar: {is_planar}")
+    # print(f"Tempo de Execução Planaridade: {time.time() - initial_time}")
 
-    print('\n')
+    # initial_time = time.time()
+    # color_welsh_powell = graph.welsh_powell()
+    # print(color_welsh_powell)
+    # print(f"Tempo de Execução Welsh Powell: {time.time() - initial_time}")
+    # print(f"Número de cores: {max(color_welsh_powell.values()) + 1}")
 
-    initial_time = time.time()
-    colors_dsatur = graph.dsatur()
-    print(colors_dsatur)
-    print(f"Tempo de Execução DSATUR: {time.time() - initial_time}")
-    print(f"Número de cores: {max(colors_dsatur.values()) + 1}")
+    # print('\n')
+
+    # initial_time = time.time()
+    # colors_dsatur = graph.dsatur()
+    # print(colors_dsatur)
+    # print(f"Tempo de Execução DSATUR: {time.time() - initial_time}")
+    # print(f"Número de cores: {max(colors_dsatur.values()) + 1}")
