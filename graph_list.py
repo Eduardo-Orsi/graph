@@ -246,7 +246,7 @@ class GraphList:
         while queue:
             u = queue.pop(0)
 
-            for ind, val in enumerate(residual_graph[u]):
+            for ind, val in residual_graph[u].items():
                 if visited[ind] == False and val > 0:
                     queue.append(ind)
                     visited[ind] = True
@@ -305,13 +305,13 @@ def print_color_map(colors: dict[int, int]) -> None:
 
 if __name__ == "__main__":
 
-    graph = GraphList.load_graph_file("graphs_txt/k5.txt")
-    print("Grafo 01")
-    print(hex(id(graph)))
+    graph = GraphList.load_graph_file("graphs_txt/espacoaereo.txt")
+    print(graph)
+    source = 10
+    sink = 9
 
-    graph_2 = graph.copy()
-    print("Grafo 02")
-    print(hex(id(graph_2)))
+    max_flow = graph.ford_fulkerson(source, sink)
+    print("Fluxo máximo:", max_flow)
     # graph.get_degree_list()
     # graph.sort_degree_list()
 
