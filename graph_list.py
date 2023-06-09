@@ -1,6 +1,6 @@
 import heapq
 import copy
-import time
+from collections import defaultdict
 
 
 class GraphList:
@@ -236,6 +236,39 @@ class GraphList:
                     max_saturation = max(max_saturation, colors[neighbor])
         
         return colors
+    
+    def ford_fulkerson(self, source, sink):
+        parent = [-1] * self.vertice_number
+        max_flow = 0
+
+        residual_graph = defaultdict(lambda: defaultdict(int))
+
+        for u in self.adj_list:
+            for v in self.adj_list[u]:
+                if self.weighted:
+                    weight = v[1]
+                    v = v[0]
+                else:
+                    weight = 1
+                residual_graph[u][v] += weight
+
+        while self.bfs(residual_graph, source, sink, parent):
+            path_flow = float("Inf")
+            s = sink
+            while s != source:
+                path_flow = min(path_flow, residual_graph[parent[s]][s])
+                s = parent[s]
+
+            max_flow += path_flow
+
+            v = sink
+            while v != source:
+                u = parent[v]
+                residual_graph[u][v] -= path_flow
+                residual_graph[v][u] += path_flow
+                v = parent[v]
+
+        return max_flow
 
     def copy(self):
         return copy.copy(self)
